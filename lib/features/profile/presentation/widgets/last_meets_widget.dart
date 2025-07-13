@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_site_app/features/meet/domain/entity/meet_entity.dart';
+import 'package:social_site_app/core/entity/meet_entity.dart';
 import 'package:social_site_app/features/meet/presentation/page/meet_page.dart';
 import 'package:social_site_app/features/profile/presentation/widgets/circle_user_avatar.dart';
 import 'package:intl/intl.dart';
@@ -30,7 +30,7 @@ class LastMeetsWidget extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(meetEntity.title, style: Theme
+            Text(meetEntity.title!, style: Theme
                 .of(context)
                 .textTheme
                 .bodySmall

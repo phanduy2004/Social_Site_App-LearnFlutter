@@ -1,16 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:social_site_app/core/get_it/get_it.dart';
-import 'package:social_site_app/features/auth/presentation/bloc/user_event.dart';
-import 'package:social_site_app/features/auth/presentation/bloc/user_state.dart';
-import 'package:social_site_app/features/auth/presentation/page/auth_page.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'core/get_it/get_it.dart';
+import 'core/repository/job_type_repository.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/bloc/user_bloc.dart';
+import 'features/auth/presentation/bloc/user_event.dart';
+import 'features/auth/presentation/bloc/user_state.dart';
+import 'features/auth/presentation/page/auth_page.dart';
+import 'features/job_type/bloc/job_type_bloc.dart';
+import 'features/job_type/bloc/job_type_event.dart';
 import 'features/main/presentation/bloc/main_bloc.dart';
 import 'firebase_options.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +22,9 @@ Future<void> main() async {
   setup();
   runApp(MultiBlocProvider(
     providers: [
+      BlocProvider<JobTypeBloc>(
+        create: (context) => getIt<JobTypeBloc>()..add(GetJobTypeEvent())
+      ),
       BlocProvider(
         create: (context) =>
         getIt<UserBloc>()

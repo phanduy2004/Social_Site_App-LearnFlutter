@@ -23,7 +23,9 @@ class LastMeetsSection extends StatelessWidget {
                 },
                 itemCount: state.lastMeets?.length ?? 0,
                 shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(
+                ),
+
               );
             },
           ),

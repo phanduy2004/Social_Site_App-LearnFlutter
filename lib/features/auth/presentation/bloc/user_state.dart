@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:social_site_app/features/auth/domain/entity/user_entity.dart';
+import 'package:social_site_app/core/entity/user_entity.dart';
 
 enum UserStatus { initial, loading, success,successfullyEditedProfile, error, logout }
 

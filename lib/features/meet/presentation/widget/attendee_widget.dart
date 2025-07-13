@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_site_app/features/auth/domain/entity/user_entity.dart';
+import 'package:social_site_app/core/entity/user_entity.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_bloc.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_state.dart';
-import 'package:social_site_app/features/meet/domain/entity/meet_entity.dart';
+import 'package:social_site_app/core/entity/meet_entity.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_bloc.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_event.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_state.dart';

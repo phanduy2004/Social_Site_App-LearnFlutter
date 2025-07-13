@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:social_site_app/features/create_meet/presentation/bloc/create_meet_event.dart';
 import 'package:social_site_app/features/create_meet/presentation/bloc/create_meet_status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_site_app/features/meet/domain/repository/meet_repository.dart';
+import 'package:social_site_app/core/repository/meet_repository.dart';
 
 class CreateMeetBloc extends Bloc<CreateMeetEvent, CreateMeetState> {
   final MeetRepository meetRepository;
@@ -19,10 +19,11 @@ class CreateMeetBloc extends Bloc<CreateMeetEvent, CreateMeetState> {
   ) async {
     emit(state.copyWith(status: CreateMeetStatus.loading));
     var result = await meetRepository.createMeets(
-      title: event.title,
-      description: event.description,
+      title: event.title!,
+      description: event.description!,
       time: event.time,
       location: event.location,
+      jobTypes: event.jobTypes
     );
     result.fold(
       (l) {

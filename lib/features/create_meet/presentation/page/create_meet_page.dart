@@ -1,6 +1,8 @@
 import 'dart:async';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:social_site_app/core/entity/job_type_entity.dart';
 import 'package:social_site_app/core/get_it/get_it.dart';
 import 'package:social_site_app/core/ui/default_button.dart';
 import 'package:social_site_app/core/ui/default_text_field.dart';
@@ -8,8 +10,13 @@ import 'package:go_router/go_router.dart';
 import 'package:social_site_app/features/create_meet/presentation/bloc/create_meet_bloc.dart';
 import 'package:social_site_app/features/create_meet/presentation/bloc/create_meet_event.dart';
 import 'package:social_site_app/features/create_meet/presentation/bloc/create_meet_status.dart';
+import 'package:social_site_app/features/create_meet/presentation/page/service_types_checkbox.dart';
+import 'package:social_site_app/features/job_type/bloc/job_type_bloc.dart';
+import 'package:social_site_app/features/job_type/bloc/job_type_event.dart';
+import 'package:social_site_app/features/profile/presentation/bloc/last_meets_bloc.dart';
+import 'package:social_site_app/features/profile/presentation/bloc/last_meets_event.dart';
+import '../../../job_type/bloc/job_type_state.dart';
 import 'location_picker_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateMeetPage extends StatefulWidget {
   static const String route = '/create_meet';
@@ -24,32 +31,37 @@ class _CreateMeetPageState extends State<CreateMeetPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   GoogleMapController? _mapController;
-
   TimeOfDay timeOfDay = TimeOfDay.now();
   LatLng? location;
+  List<JobTypeEntity> selectedJobTypes = [];
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<CreateMeetBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<CreateMeetBloc>()),
+        BlocProvider(create: (context) => getIt<JobTypeBloc>()..add(GetJobTypeEvent())),
+      ],
       child: BlocConsumer<CreateMeetBloc, CreateMeetState>(
         listener: (context, state) {
           if (state.status == CreateMeetStatus.error) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('${state.errorMessage}')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage ?? 'Có lỗi xảy ra')),
+            );
+          } else if (state.status == CreateMeetStatus.success) {
+            context.pop();
           }
         },
         builder: (context, state) {
           if (state.status == CreateMeetStatus.loading) {
-            return Scaffold(
+            return const Scaffold(
               body: Center(child: CircularProgressIndicator.adaptive()),
             );
           }
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                'Create Meet',
+                'Tạo Cuộc Gặp',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               centerTitle: false,
@@ -57,93 +69,105 @@ class _CreateMeetPageState extends State<CreateMeetPage> {
             body: SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Title',
+                        'Tiêu đề',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       DefaultTextField(
-                        hintText: 'Enter meet title...',
+                        hintText: 'Nhập tiêu đề...',
                         controller: _titleController,
-                        onChanged: (_) {
-                          setState(() {});
-                        },
+                        maxLength: 100,
+                        onChanged: (_) => setState(() {}),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Text(
-                        'Description',
+                        'Loại dịch vụ',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 10),
-
+                      const SizedBox(height: 5),
+                      _buildServiceTypesSelector(context),
+                      const SizedBox(height: 15),
+                      Text(
+                        'Mô tả',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       DefaultTextField(
-                        hintText: 'Description meet...',
+                        hintText: 'Mô tả cuộc gặp...',
                         controller: _descriptionController,
                         maxLength: 255,
                         minLines: 1,
                         maxLines: 6,
-                        onChanged: (_) {
-                          setState(() {});
-                        },
+                        onChanged: (_) => setState(() {}),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
-                        'Time',
+                        'Thời gian',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
-                        'Events automatically mark as completed 2 hours after they start.',
+                        'Sự kiện sẽ tự động đánh dấu hoàn thành sau 2 giờ kể từ khi bắt đầu.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(.8),
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(.8),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _buildTimePicker(context),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
-                        'Location',
+                        'Vị trí',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
-                        'Tap map to select location',
+                        'Chạm vào bản đồ để chọn vị trí',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.8),
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _buildLocationPicker(context),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       DefaultButton(
-                        text: 'Create',
-                        onPressed:  location == null || _titleController.text.isEmpty || _descriptionController.text.isEmpty ? null : () {
-                          context.read<CreateMeetBloc>().add(CreateMeetEvent(title: _titleController.text, description: _descriptionController.text, time: timeOfDay, location: location!));
+                        text: 'Tạo',
+                        onPressed: (location == null ||
+                            _titleController.text.isEmpty ||
+                            _descriptionController.text.isEmpty ||
+                            selectedJobTypes.isEmpty)
+                            ? null
+                            : () {
+                          context.read<CreateMeetBloc>().add(
+                            CreateMeetEvent(
+                              title: _titleController.text,
+                              description: _descriptionController.text,
+                              time: timeOfDay,
+                              location: location!,
+                              jobTypes: selectedJobTypes
+                            ),
+                          );
                         },
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -155,13 +179,51 @@ class _CreateMeetPageState extends State<CreateMeetPage> {
     );
   }
 
+  Widget _buildServiceTypesSelector(BuildContext context) {
+    return BlocBuilder<JobTypeBloc, JobTypeState>(
+      builder: (context, jobTypeState) {
+        return InkWell(
+          onTap: jobTypeState.status == JobTypeStatus.loading ||
+              jobTypeState.status == JobTypeStatus.error
+              ? null
+              : () async {
+            final selected = await showDialog<List<JobTypeEntity>>(
+              context: context,
+              builder: (context) => ServiceTypesCheckbox(
+                selectedItems: selectedJobTypes,
+              ),
+            );
+            if (selected != null) {
+              setState(() {
+                selectedJobTypes = selected;
+              });
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              selectedJobTypes.isEmpty
+                  ? 'Chọn loại dịch vụ'
+                  : selectedJobTypes.map((e) => e.name).join(', '),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildTimePicker(BuildContext context) {
     return Row(
       children: [
         _buildTimePart(context, timeOfDay.hour),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Text(':', style: Theme.of(context).textTheme.bodyMedium),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         _buildTimePart(context, timeOfDay.minute),
       ],
     );
@@ -170,7 +232,7 @@ class _CreateMeetPageState extends State<CreateMeetPage> {
   Widget _buildTimePart(BuildContext context, int value) {
     return InkWell(
       onTap: () async {
-        var time = await showTimePicker(
+        final time = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.now(),
           initialEntryMode: TimePickerEntryMode.inputOnly,
@@ -186,7 +248,7 @@ class _CreateMeetPageState extends State<CreateMeetPage> {
           color: Theme.of(context).colorScheme.onSurfaceVariant,
           borderRadius: BorderRadius.circular(12),
         ),
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Text(
           value.toString().padLeft(2, '0'),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 16),
@@ -215,31 +277,37 @@ class _CreateMeetPageState extends State<CreateMeetPage> {
           });
         },
         onTap: (_) async {
-          LatLng? selectedLocation = await context.push(
-            LocationPickerPage.route,
-          );
+          final selectedLocation = await context.push(LocationPickerPage.route);
           if (selectedLocation != null) {
             setState(() {
-              location = selectedLocation;
+              location = selectedLocation as LatLng;
             });
             _mapController?.animateCamera(
-              CameraUpdate.newLatLngZoom(selectedLocation, 15),
+              CameraUpdate.newLatLngZoom(selectedLocation as LatLng, 15),
             );
           }
         },
         markers: location != null
             ? {
-                Marker(
-                  markerId: MarkerId('selectedLocation'),
-                  position: location!,
-                ),
-              }
+          Marker(
+            markerId: const MarkerId('selectedLocation'),
+            position: location!,
+          ),
+        }
             : {},
-        initialCameraPosition: CameraPosition(
-          target: location ?? LatLng(10.7769, 106.7009),
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(10.7769, 106.7009), // TP. Hồ Chí Minh
           zoom: 10,
-        ), // Tọa độ trung tâm TP. Hồ Chí Minh
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _mapController?.dispose();
+    super.dispose();
   }
 }

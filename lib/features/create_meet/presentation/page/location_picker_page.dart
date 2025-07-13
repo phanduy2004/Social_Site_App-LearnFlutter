@@ -51,7 +51,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
               children: [
                 GoogleMap(
                   initialCameraPosition: CameraPosition(
-                      target: state.location ?? LatLng(10.7769, 106.7009),
+                      target: state.location ?? LatLng(10.776389, -160.776389),
                       zoom: 10),
                   myLocationEnabled: true,
                   onCameraMove: (camera){

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:social_site_app/features/meet/domain/repository/meet_repository.dart';
+import 'package:social_site_app/core/repository/meet_repository.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_event.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,4 +101,5 @@ class MeetBloc extends Bloc<MeetEvent, MeetState>{
       emit(state.copyWith(status: MeetStatus.left));
     });
   }
+
 }

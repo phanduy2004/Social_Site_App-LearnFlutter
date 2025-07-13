@@ -1,23 +1,31 @@
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_site_app/core/api/api_client.dart';
-import 'package:social_site_app/core/model/failure.dart';
-import 'package:social_site_app/features/auth/data/datasource/auth_remote_datasource.dart';
-import 'package:social_site_app/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:social_site_app/core/datasource/auth_remote_datasource.dart';
+import 'package:social_site_app/core/repository/job_type_repository.dart';
+import 'package:social_site_app/core/repository_impl/auth_repository_impl.dart';
+import 'package:social_site_app/core/repository_impl/job_type_repository_impl.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_bloc.dart';
+import 'package:social_site_app/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:social_site_app/features/create_meet/presentation/bloc/create_meet_bloc.dart';
 import 'package:social_site_app/features/create_meet/presentation/bloc/location_picker_bloc.dart';
-import 'package:social_site_app/features/meet/domain/repository/meet_repository.dart';
+import 'package:social_site_app/core/repository/meet_repository.dart';
+import 'package:social_site_app/features/job_type/bloc/job_type_bloc.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_bloc.dart';
 import 'package:social_site_app/features/profile/presentation/bloc/last_meets_bloc.dart';
 
-import '../../features/auth/data/datasource/user_remote_datasource.dart';
-import '../../features/auth/data/repository/user_repository_impl.dart';
-import '../../features/auth/domain/repository/auth_repository.dart';
-import '../../features/auth/domain/repository/user_repository.dart';
+import '../datasource/job_type_remote_datasource.dart';
+import '../datasource/user_remote_datasource.dart';
+import '../repository_impl/user_repository_impl.dart';
+import '../repository/auth_repository.dart';
+import '../repository/user_repository.dart';
+import '../datasource/chat_remote_datasource.dart';
+import '../datasource/chat_socket_datasource.dart';
+import '../repository_impl/chat_repository_impl.dart';
+import '../repository/chat_repository.dart';
 import '../../features/main/presentation/bloc/main_bloc.dart';
-import '../../features/meet/data/datasource/meet_remote_datasource.dart';
-import '../../features/meet/data/repository/meet_repository_impl.dart';
+import '../datasource/meet_remote_datasource.dart';
+import '../repository_impl/meet_repository_impl.dart';
 
 var getIt = GetIt.instance;
 
@@ -41,6 +49,9 @@ void registerDataSource(){
  getIt.registerSingleton(AuthRemoteDatasource(dio: dio));
  getIt.registerSingleton(UserRemoteDatasource(dio: dioWithToken));
  getIt.registerSingleton(MeetRemoteDatasource(dio: dioWithToken));
+ getIt.registerSingleton(ChatRemoteDatasource(dio: dioWithToken));
+ getIt.registerSingleton(ChatSocketDatasource());
+ getIt.registerSingleton(JobTypeRemoteDatasource(dio: dioWithToken));
 
 
 }
@@ -51,6 +62,10 @@ void registerRepositories(){
      UserRepositoryImpl(userRemoteDatasource: getIt()));
  getIt.registerSingleton<MeetRepository>(
      MeetRepositoryImpl(meetRemoteDatasource: getIt()));
+ getIt.registerSingleton<ChatRepository>(
+     ChatRepositoryImpl(chatRemoteDatasource: getIt(), chatSocketDatasource: getIt()));
+ getIt.registerSingleton<JobTypeRepository>(
+     JobTypeRepositoryImpl(jobTypeRemoteDatasource: getIt()));
 }
 
 void registerBloc(){
@@ -63,6 +78,10 @@ void registerBloc(){
  getIt.registerFactory(() => CreateMeetBloc(meetRepository: getIt()));
  getIt.registerFactory(() => MeetBloc(meetRepository: getIt()));
  getIt.registerFactory(() => MainBloc(meetRepository: getIt()));
+ getIt.registerFactory(() => ChatBloc(chatRepository: getIt()));
+ getIt.registerFactory(() => JobTypeBloc(jobTypeRepository: getIt()));
+
+
 
 
 

@@ -15,3 +15,10 @@ class MeetFailure extends Failure {
 class MeetsFailure extends Failure{
   MeetsFailure({required super.message});
 }
+class ChatFailure extends Failure{
+  ChatFailure({required super.message});
+}
+
+class JobTypeFailure extends Failure{
+  JobTypeFailure({required super.message});
+}

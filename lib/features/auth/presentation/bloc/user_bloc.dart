@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:social_site_app/features/auth/domain/repository/auth_repository.dart';
-import 'package:social_site_app/features/auth/domain/repository/user_repository.dart';
+import 'package:social_site_app/core/repository/auth_repository.dart';
+import 'package:social_site_app/core/repository/user_repository.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_event.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_state.dart';
 import 'package:bloc/bloc.dart';
@@ -50,7 +50,7 @@ class UserBloc extends Bloc<UserEvent, UserState>{
 
   Future onEditProfileEvent(EditProfileEvent event, Emitter<UserState> emit) async {
     emit(state.copyWith(status: UserStatus.loading));
-    var result = await userRepository.editUser(name: event.name, bio: event.bio, avatar: event.avatar);
+    var result = await userRepository.editUser(name: event.name, bio: event.bio, avatar: event.avatar, jobs: event.jobs);
     result.fold((l){
       emit(state.copyWith(status: UserStatus.error, errorMessage: l.message));
     }, (r){

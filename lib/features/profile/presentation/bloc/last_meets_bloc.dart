@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../meet/domain/repository/meet_repository.dart';
+import '../../../../core/repository/meet_repository.dart';
 import 'last_meets_event.dart';
 import 'last_meets_state.dart';
 class LastMeetsBloc extends Bloc<LastMeetsEvent,LastMeetsState>{

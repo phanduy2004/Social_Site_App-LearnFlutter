@@ -8,6 +8,8 @@ import 'package:social_site_app/features/profile/presentation/page/edit_profile_
 import 'package:social_site_app/features/profile/presentation/page/profile_page.dart';
 import 'package:social_site_app/splash_page.dart';
 
+import '../../features/chat/presentation/page/chat_page.dart';
+
 class AppRouter {
 
   static var router = GoRouter(initialLocation: SplashPage.route,routes: [
@@ -35,6 +37,9 @@ class AppRouter {
     GoRoute(path: '/meet/:id', builder: (context,state){
       return MeetPage(meetId: state.pathParameters['id'] ?? '');
     }),
+    GoRoute(path: '/chat/:id',builder: (context,state){
+      return ChatPage(meetId: state.pathParameters['id'] ?? '',);
+    })
     ],
   );
 }

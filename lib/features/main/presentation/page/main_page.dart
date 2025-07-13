@@ -8,7 +8,8 @@ import 'package:social_site_app/features/main/presentation/bloc/main_bloc.dart';
 import 'package:social_site_app/features/main/presentation/bloc/main_event.dart';
 import 'package:social_site_app/features/main/presentation/bloc/main_state.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_site_app/features/meet/domain/entity/meet_entity.dart';
+import 'package:social_site_app/features/main/presentation/widget/main_bottom_sheet.dart';
+import 'package:social_site_app/core/entity/meet_entity.dart';
 import 'package:social_site_app/features/meet/presentation/page/meet_page.dart';
 
 import '../../../profile/presentation/page/profile_page.dart';
@@ -31,6 +32,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     context.read<MainBloc>().add(GetUserLocationEvent());
+    context.read<MainBloc>().add(GetCurrentMeetsEvent());
   }
 
   @override
@@ -41,6 +43,7 @@ class _MainPageState extends State<MainPage> {
             state.userLocation != null) {
           mapController?.animateCamera(
               CameraUpdate.newLatLngZoom(state.userLocation!, 15));
+          context.read<MainBloc>().add(GetNearByMeetsEvent());
         }
         if (state.mapStatus == MainStatus.success &&
             (state.mapMeets?.isNotEmpty ?? false)) {
@@ -113,6 +116,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
+              MainBottomSheet()
             ],
           ),
         );
@@ -147,4 +151,3 @@ class _MainPageState extends State<MainPage> {
 
 
 }
-

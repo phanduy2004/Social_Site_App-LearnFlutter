@@ -5,7 +5,8 @@ import 'package:social_site_app/core/ui/default_button.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_bloc.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_state.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_event.dart';
-
+import 'package:go_router/go_router.dart';
+import '../../../chat/presentation/page/chat_page.dart';
 import '../bloc/meet_bloc.dart';
 import '../bloc/meet_state.dart';
 
@@ -34,6 +35,8 @@ class MeetBottomButtons extends StatelessWidget {
                   Expanded(child: DefaultButton(
                     text: 'Chat',
                     onPressed: (){
+                      context.push(ChatPage.route(meetState.meetEntity?.id ?? ''));
+
                     },
                   )),
                   if(!(meetState.meetEntity?.isFinished ?? true))Row(

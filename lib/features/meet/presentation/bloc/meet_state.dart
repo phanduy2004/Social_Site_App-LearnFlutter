@@ -1,4 +1,4 @@
-import 'package:social_site_app/features/meet/domain/entity/meet_entity.dart';
+import 'package:social_site_app/core/entity/meet_entity.dart';
 import 'package:equatable/equatable.dart';
 
 enum MeetStatus { initial, loading, success,left, canceled, error }
