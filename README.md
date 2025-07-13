@@ -1,16 +1,9 @@
 # social_site_app
 
-A new Flutter project.
+**Flutter + NodeJs Production Ready Social Network App ! Firebase, Bloc, Google Maps Full Tutorial**
 
-## Getting Started
+A new Flutter project for learning and research purposes.
 
-This project is a starting point for a Flutter application.
+This project is part of my journey to explore Flutter for cross-platform mobile development. The tutorial and guidance for this project are provided by DevVibe on YouTube, available at: https://www.youtube.com/watch?v=92zJ71S9wC8&t=19749s
+Thanks DevVide.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
