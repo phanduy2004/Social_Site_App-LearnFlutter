@@ -14,21 +14,26 @@ class LastMeetsSection extends StatelessWidget {
         children: [
           BlocBuilder<LastMeetsBloc, LastMeetsState>(
             builder: (context, state) {
+              if (state.status == LastMeetsStatus.loading) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (state.status == LastMeetsStatus.error) {
+                return Center(child: Text('Error: ${state.status}'));
+              }
+              if (state.lastMeets == null || state.lastMeets!.isEmpty) {
+                return Center(child: Text('No meets available'));
+              }
               return ListView.separated(
                 itemBuilder: (context, index) {
                   return LastMeetsWidget(meetEntity: state.lastMeets![index]);
                 },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 10);
-                },
-                itemCount: state.lastMeets?.length ?? 0,
+                separatorBuilder: (context, index) => SizedBox(height: 10),
+                itemCount: state.lastMeets!.length,
                 shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(
-                ),
-
+                physics: AlwaysScrollableScrollPhysics(),
               );
             },
-          ),
+          )
         ],
       ),
     );

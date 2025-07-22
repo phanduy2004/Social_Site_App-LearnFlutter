@@ -19,7 +19,7 @@ class MeetEntity extends Equatable{
   final bool isCancelled;
   final double? latitude;
   final double? longitude;
-  final List<JobTypeEntity> service;
+  final List<JobTypeEntity>? service;
 
   MeetEntity(
       {required this.id,
@@ -30,9 +30,9 @@ class MeetEntity extends Equatable{
         required this.admin,
         required this.isFinished,
         required this.isCancelled,
-        required this.latitude,
-        required this.longitude,
-        required this.service
+        this.latitude,
+        this.longitude,
+        this.service
       });
 
   @override

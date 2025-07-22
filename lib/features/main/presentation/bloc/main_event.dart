@@ -12,7 +12,7 @@ class GetMapMeetsEvent extends MainEvent{
 
   GetMapMeetsEvent({required this.center, required this.radius});
 }
-class GetNearByMeetsEvent extends MainEvent{
+class GetNearbyMeetsEvent extends MainEvent{
 
 
 }

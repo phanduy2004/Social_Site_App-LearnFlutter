@@ -43,7 +43,7 @@ class _MainPageState extends State<MainPage> {
             state.userLocation != null) {
           mapController?.animateCamera(
               CameraUpdate.newLatLngZoom(state.userLocation!, 15));
-          context.read<MainBloc>().add(GetNearByMeetsEvent());
+          context.read<MainBloc>().add(GetNearbyMeetsEvent());
         }
         if (state.mapStatus == MainStatus.success &&
             (state.mapMeets?.isNotEmpty ?? false)) {

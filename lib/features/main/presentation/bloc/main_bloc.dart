@@ -11,7 +11,7 @@ class MainBloc extends Bloc<MainEvent,MainState>{
   MainBloc({required this.meetRepository}): super(MainState.initial()){
     on<GetUserLocationEvent>(onGetUserLocationEvent);
     on<GetMapMeetsEvent>(onGetMapMeetsEvent);
-    on<GetNearByMeetsEvent>(onGetNearByMeetsEvent);
+    on<GetNearbyMeetsEvent>(onGetNearByMeetsEvent);
     on<GetCurrentMeetsEvent>(onGetCurrentMeetsEvent);
 
 
@@ -50,7 +50,7 @@ class MainBloc extends Bloc<MainEvent,MainState>{
     });
   }
 
-  Future onGetNearByMeetsEvent(GetNearByMeetsEvent event, Emitter<MainState> emit) async {
+  Future onGetNearByMeetsEvent(GetNearbyMeetsEvent event, Emitter<MainState> emit) async {
     emit(state.copyWith(nearbyStatus: MainStatus.loading));
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if(!serviceEnabled){
@@ -66,7 +66,7 @@ class MainBloc extends Bloc<MainEvent,MainState>{
     }
 
     Position position = await Geolocator.getCurrentPosition();
-    var result = await meetRepository.getMeets(position.latitude, position.longitude, 10000);
+    var result = await meetRepository.getMeets(position.latitude, position.longitude, 20000);
     result.fold((l) {
       emit(state.copyWith(nearbyStatus: MainStatus.error,nearbyErrorMessage: l.message));
     }, (r) {

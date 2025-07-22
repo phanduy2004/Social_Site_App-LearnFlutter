@@ -31,7 +31,7 @@ class AttendeeWidget extends StatelessWidget {
                     url: attendee.avatar,
                   ),
                   SizedBox(width: 15,),
-                  Text(attendee.name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  Text(attendee.name!, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w500
                   ),),
@@ -63,7 +63,7 @@ class AttendeeWidget extends StatelessWidget {
                   onTap: (){
                     context.pop();
                     showDialog(context: context, builder: (context){
-                      return Center(child: CachedNetworkImage(imageUrl: attendee.avatar));
+                      return Center(child: CachedNetworkImage(imageUrl: attendee.avatar!));
                     },barrierDismissible: true);
                   },
                 ),
@@ -73,7 +73,7 @@ class AttendeeWidget extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                   ),),
                   onTap: (){
-                    context.read<MeetBloc>().add(TransferAdminEvent(userId: attendee.id ));
+                    context.read<MeetBloc>().add(TransferAdminEvent(userId: attendee.id! ));
                   },
                 ),
                 ListTile(
@@ -82,7 +82,7 @@ class AttendeeWidget extends StatelessWidget {
                     color: Theme.of(context).colorScheme.error,
                   ),),
                   onTap: (){
-                    context.read<MeetBloc>().add(KickUserEvent(userId: attendee.id ));
+                    context.read<MeetBloc>().add(KickUserEvent(userId: attendee.id! ));
                   },
                 )
               ],

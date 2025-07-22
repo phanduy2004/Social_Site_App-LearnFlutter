@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:social_site_app/core/entity/job_entity.dart';
-
 part 'user_entity.g.dart';
 
 @JsonSerializable()

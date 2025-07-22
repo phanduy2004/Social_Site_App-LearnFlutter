@@ -55,7 +55,7 @@ class _ServiceTypesCheckboxState extends State<ServiceTypesCheckbox> {
             child: ListBody(
               children: jobTypeState.jobTypes.map((jobType) {
                 return CheckboxListTile(
-                  title: Text(jobType.name),
+                  title: Text(jobType.name!),
                   value: _tempSelectedItems.contains(jobType),
                   onChanged: (bool? value) {
                     setState(() {

@@ -26,7 +26,7 @@ class MessageWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              messageEntity.sender.name,
+              messageEntity.sender.name!,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium

@@ -29,7 +29,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure,void>> editUser({required String name,  required String bio, File? avatar, required List<JobEntity>? jobs}) async {
+  Future<Either<Failure,void>> editUser({required String name,  required String bio, File? avatar, List<JobEntity>? jobs}) async {
     try{
       if(avatar != null){
         await userRemoteDatasource.uploadAvatar(avatar);

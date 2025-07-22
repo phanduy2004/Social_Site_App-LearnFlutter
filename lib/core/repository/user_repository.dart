@@ -11,5 +11,5 @@ import '../model/either.dart';
 abstract class UserRepository{
   Future<Either<Failure,UserEntity>> getUser();
   Future<Either<Failure, void>> editUser(
-      {required String name,required String bio, File? avatar, required List<JobEntity>? jobs});
+      {required String name,required String bio, File? avatar, List<JobEntity>? jobs});
 }

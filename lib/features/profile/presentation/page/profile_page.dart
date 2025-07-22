@@ -21,8 +21,9 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => getIt<LastMeetsBloc>()..add(GetLastMeetsEvent(refresh: true)),
-        child: BlocBuilder<UserBloc,UserState>(
+      create: (context) =>
+          getIt<LastMeetsBloc>()..add(GetLastMeetsEvent(refresh: true)),
+      child: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -41,7 +42,6 @@ class ProfilePage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return DefaultModalBottomSheet(
-
                           elements: [
                             ListTile(
                               leading: Icon(
@@ -82,70 +82,73 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
             body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CircleUserAvatar(
-                          height: 100,
-                          width: 100,
-                          url: state.userEntity?.avatar,
-                        ),
-                        SizedBox(width: 15),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start, // Căn trái
-                          children: [
-                            Text(
-                              '${state.userEntity?.name}',
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            Text(
-                              '${state.userEntity?.email}',
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withOpacity(.8),
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '${state.userEntity?.bio}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.8),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleUserAvatar(
+                            height: 100,
+                            width: 100,
+                            url: state.userEntity?.avatar,
+                          ),
+                          SizedBox(width: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // Căn trái
+                            children: [
+                              Text(
+                                '${state.userEntity?.name}',
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                              Text(
+                                '${state.userEntity?.email}',
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface.withOpacity(.8),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    InkWell(
-                      onTap: () {
-                        //For test only
-                        context.push(CreateMeetPage.route);
-                      },
-                      child: Text(
-                        'Last meets',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                      SizedBox(height: 10),
+                      Text(
+                        '${state.userEntity?.bio}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.8),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    LastMeetsSection()
-                  ],
+                      SizedBox(height: 20),
+                      InkWell(
+                        onTap: () {
+                          //For test only
+                          context.push(CreateMeetPage.route);
+                        },
+                        child: Text(
+                          'Last meets',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      LastMeetsSection(),
+                    ],
+                  ),
                 ),
               ),
             ),

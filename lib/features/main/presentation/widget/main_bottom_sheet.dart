@@ -15,44 +15,66 @@ class MainBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      builder: (context, scrollController) {
-        return BlocBuilder<MainBloc, MainState>(
-          builder: (context,state) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                boxShadow: [BoxShadow(blurRadius: 10, spreadRadius:  10, color: Colors.grey.withOpacity(.5))]
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: SingleChildScrollView(
-                  controller: scrollController,
+    return DraggableScrollableSheet(builder: (context, scrollController) {
+      return BlocBuilder<MainBloc, MainState>(
+
+        builder: (context, state) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .surface,
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 10,
+                    spreadRadius: 10,
+                    color: Colors.grey.withOpacity(.5)
+                )
+              ],
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+
+            ),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                context.read<MainBloc>().add(GetNearbyMeetsEvent());
+                context.read<MainBloc>().add(GetCurrentMeetsEvent());
+              },
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      Text('Current meets',style: Theme.of(context).textTheme.bodyLarge,),
+                      if(state.currentMeets?.isNotEmpty ?? false)Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Current meets',style: Theme.of(context).textTheme.bodyLarge,),
+                          SizedBox(height: 10,),
+                          ListView.separated(itemBuilder: (context,index){
+                            return CurrentMeetWidget(meetEntity: state.currentMeets![index]);
+                          },separatorBuilder: (context,index){
+                            return SizedBox(height: 10,);
+                          }, shrinkWrap: true,padding: EdgeInsets.zero,physics: NeverScrollableScrollPhysics(),itemCount: state.currentMeets?.length ?? 0,),
+                          SizedBox(height: 10,),
+                        ],
+                      ),
+                      Text('Meets near me',style: Theme.of(context).textTheme.bodyLarge,),
                       SizedBox(height: 10,),
-                      ListView.separated(itemBuilder: (context,index){
-                        return CurrentMeetWidget(meetEntity: state.currentMeets![index]);
-                      },
-                        separatorBuilder: (context,index){
-                          return SizedBox(height: 10,);
-                        }, shrinkWrap: true,padding: EdgeInsets.zero,physics: NeverScrollableScrollPhysics(),itemCount: state.currentMeets?.length ?? 0,),
-                      SizedBox(height: 10,),
+                      ListView.separated(itemBuilder: (context, index) {
+                        return NearbyMeetWidget(meetEntity: state.nearbyMeets![index]);
+                      },separatorBuilder: (context,index){
+                        return SizedBox(height: 10,);
+                      }, itemCount:state.nearbyMeets?.length ?? 0,shrinkWrap: true,physics: NeverScrollableScrollPhysics(),padding: EdgeInsets.zero,)
                     ],
                   ),
                 ),
               ),
-            );
-          }
-        );
-      },
-      initialChildSize: .2,
-      minChildSize: .1,
-      maxChildSize: .5,
-    );
+            ),
+          );
+        },
+      );
+    }, initialChildSize: .3, minChildSize: .3, maxChildSize: .6);
   }
 }
