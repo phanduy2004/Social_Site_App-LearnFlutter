@@ -41,7 +41,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   dio:
-
+  geocoding: ^3.0.0
   flutter_bloc:
   get_it:
   firebase_core:
