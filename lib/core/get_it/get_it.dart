@@ -14,8 +14,12 @@ import 'package:social_site_app/features/job_type/bloc/job_type_bloc.dart';
 import 'package:social_site_app/features/meet/presentation/bloc/meet_bloc.dart';
 import 'package:social_site_app/features/profile/presentation/bloc/last_meets_bloc.dart';
 
+import '../../features/create_meet/presentation/bloc_emergency/create_emergency_bloc.dart';
+import '../datasource/emergency_remote_datasource.dart';
 import '../datasource/job_type_remote_datasource.dart';
 import '../datasource/user_remote_datasource.dart';
+import '../repository/emergency_repository.dart';
+import '../repository_impl/emergency_repository_impl.dart';
 import '../repository_impl/user_repository_impl.dart';
 import '../repository/auth_repository.dart';
 import '../repository/user_repository.dart';
@@ -52,6 +56,8 @@ void registerDataSource(){
  getIt.registerSingleton(ChatRemoteDatasource(dio: dioWithToken));
  getIt.registerSingleton(ChatSocketDatasource());
  getIt.registerSingleton(JobTypeRemoteDatasource(dio: dioWithToken));
+ getIt.registerSingleton(EmergencyRemoteDatasource(dio: dioWithToken));
+
 
 
 }
@@ -66,6 +72,8 @@ void registerRepositories(){
      ChatRepositoryImpl(chatRemoteDatasource: getIt(), chatSocketDatasource: getIt()));
  getIt.registerSingleton<JobTypeRepository>(
      JobTypeRepositoryImpl(jobTypeRemoteDatasource: getIt()));
+ getIt.registerSingleton<EmergencyRepository>(
+     EmergencyRepositoryImpl(emergencyRemoteDatasource: getIt()));
 }
 
 void registerBloc(){
@@ -80,10 +88,6 @@ void registerBloc(){
  getIt.registerFactory(() => MainBloc(meetRepository: getIt()));
  getIt.registerFactory(() => ChatBloc(chatRepository: getIt()));
  getIt.registerFactory(() => JobTypeBloc(jobTypeRepository: getIt()));
-
-
-
-
-
+ getIt.registerFactory(() => CreateEmergencyBloc(emergencyRepository: getIt()));
 
 }

@@ -3,6 +3,7 @@ import 'package:social_site_app/core/get_it/get_it.dart';
 import 'package:social_site_app/core/ui/default_modal_bottom_sheet.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_bloc.dart';
 import 'package:social_site_app/features/auth/presentation/bloc/user_event.dart';
+import 'package:social_site_app/features/create_meet/presentation/page/create_emergency_page.dart';
 import 'package:social_site_app/features/create_meet/presentation/page/create_meet_page.dart';
 import 'package:social_site_app/features/profile/presentation/bloc/last_meets_bloc.dart';
 import 'package:social_site_app/features/profile/presentation/bloc/last_meets_event.dart';
@@ -138,7 +139,7 @@ class ProfilePage extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           //For test only
-                          context.push(CreateMeetPage.route);
+                          context.push(CreateEmergencyPage.route);
                         },
                         child: Text(
                           'Last meets',

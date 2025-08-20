@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:social_site_app/core/utils/google_map_utils.dart';
+import 'package:social_site_app/features/create_meet/presentation/page/create_emergency_page.dart';
 import 'package:social_site_app/features/create_meet/presentation/page/create_meet_page.dart';
 import 'package:social_site_app/features/main/presentation/bloc/main_bloc.dart';
 import 'package:social_site_app/features/main/presentation/bloc/main_event.dart';
@@ -89,7 +90,7 @@ class _MainPageState extends State<MainPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          context.push(CreateMeetPage.route);
+                          context.push(CreateEmergencyPage.route);
                         },
                         icon: Icon(Icons.add),
                         iconSize: 30,

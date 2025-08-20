@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:social_site_app/features/auth/presentation/page/auth_page.dart';
+import 'package:social_site_app/features/create_meet/presentation/page/create_emergency_page.dart';
 import 'package:social_site_app/features/create_meet/presentation/page/create_meet_page.dart';
 import 'package:social_site_app/features/create_meet/presentation/page/location_picker_page.dart';
 import 'package:social_site_app/features/main/presentation/page/main_page.dart';
@@ -30,6 +31,9 @@ class AppRouter {
     }),
     GoRoute(path: CreateMeetPage.route, builder: (context,state){
       return CreateMeetPage();
+    }),
+    GoRoute(path: CreateEmergencyPage.route, builder: (context,state){
+      return CreateEmergencyPage();
     }),
     GoRoute(path: LocationPickerPage.route, builder: (context,state){
       return LocationPickerPage();
